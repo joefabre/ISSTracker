@@ -29,9 +29,22 @@
 		3C28B2142D757D840078FDCE /* ISSTrackerUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ISSTrackerUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		3C49D30F2D7653B0009A76F5 /* Exceptions for "ISSTracker" folder in "ISSTracker" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = 3C28B1F82D757D820078FDCE /* ISSTracker */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		3C28B1FB2D757D820078FDCE /* ISSTracker */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				3C49D30F2D7653B0009A76F5 /* Exceptions for "ISSTracker" folder in "ISSTracker" target */,
+			);
 			path = ISSTracker;
 			sourceTree = "<group>";
 		};
