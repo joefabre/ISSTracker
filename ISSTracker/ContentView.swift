@@ -1,5 +1,6 @@
 import SwiftUI
 import MapKit
+import CoreLocation
 
 struct ContentView: View {
     @StateObject private var locationManager = LocationManager()
@@ -10,7 +11,7 @@ struct ContentView: View {
         center: CLLocationCoordinate2D(latitude: 0, longitude: 0),
         span: MKCoordinateSpan(latitudeDelta: 50, longitudeDelta: 50)
     )
-
+    
     var distanceMiles: Double {
         calculateDistance(
             lat1: locationManager.userLatitude,
@@ -28,9 +29,8 @@ struct ContentView: View {
                     .fontWeight(.bold)
                     .padding(.top, 10)
 
-                // ✅ Fixed Map View
                 Map {
-                    Marker("ISS", coordinate: CLLocationCoordinate2D(
+                    Marker("🛰️ ISS", coordinate: CLLocationCoordinate2D(
                         latitude: issTracker.issLatitude,
                         longitude: issTracker.issLongitude
                     ))
@@ -39,16 +39,15 @@ struct ContentView: View {
                 .cornerRadius(15)
                 .padding()
 
-                // ✅ Updated List-based UI
                 List {
                     Section(header: Text("Your Location").font(.headline)) {
-                        InfoRow(icon: "location.fill", label: "Latitude", value: String(format: "%.2f", locationManager.userLatitude))
-                        InfoRow(icon: "location.fill", label: "Longitude", value: String(format: "%.2f", locationManager.userLongitude))
+                        InfoRow(icon: "location.fill", label: "Latitude", value: String(format: "%.6f", locationManager.userLatitude))
+                        InfoRow(icon: "location.fill", label: "Longitude", value: String(format: "%.6f", locationManager.userLongitude))
                     }
 
                     Section(header: Text("ISS Information").font(.headline)) {
-                        InfoRow(icon: "globe", label: "ISS Latitude", value: String(format: "%.2f", issTracker.issLatitude))
-                        InfoRow(icon: "globe", label: "ISS Longitude", value: String(format: "%.2f", issTracker.issLongitude))
+                        InfoRow(icon: "globe", label: "ISS Latitude", value: String(format: "%.6f", issTracker.issLatitude))
+                        InfoRow(icon: "globe", label: "ISS Longitude", value: String(format: "%.6f", issTracker.issLongitude))
                         InfoRow(icon: "arrow.up", label: "Altitude", value: String(format: "%.2f miles", issTracker.issAltitudeMiles))
                         InfoRow(icon: "speedometer", label: "Speed", value: String(format: "%.2f mph", issTracker.issSpeedMph))
                     }
@@ -57,16 +56,9 @@ struct ContentView: View {
                         InfoRow(icon: "ruler", label: "Distance", value: String(format: "%.2f miles", distanceMiles))
                     }
                 }
-                .frame(maxHeight: 300) // Prevents the list from taking too much space
+                .frame(maxHeight: 300)
+                .listStyle(InsetGroupedListStyle())
 
-                // ✅ Fixed List Style for macOS & iOS
-                #if os(macOS)
-                    .listStyle(SidebarListStyle()) // macOS sidebar style
-                #else
-                    .listStyle(InsetGroupedListStyle()) // iOS grouped style
-                #endif
-
-                // ✅ Fixed Mute Button
                 Button(action: {
                     isMuted.toggle()
                 }) {
@@ -84,26 +76,36 @@ struct ContentView: View {
 
                 Spacer()
             }
-            .navigationTitle("ISS Tracker") // ✅ Works on both macOS and iOS
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .principal) {
+                    Text("ISS Tracker")
+                        .font(.headline)
+                        .fontWeight(.bold)
+                }
+            }
         }
         .onAppear {
-            print("🔹 Calling requestLocation() from ContentView")
+            print("🔹 Requesting location updates")
             locationManager.requestLocation()
-            
             issTracker.fetchISSLocation()
-            Timer.scheduledTimer(withTimeInterval: 60, repeats: true) { _ in
-                issTracker.fetchISSLocation()
-                region.center = CLLocationCoordinate2D(latitude: issTracker.issLatitude, longitude: issTracker.issLongitude)
+        }
+        .onReceive(Timer.publish(every: 10, on: .main, in: .common).autoconnect()) { _ in
+            print("🔄 Updating Location & ISS Data")
+            locationManager.requestLocation()
+            issTracker.fetchISSLocation()
+            
+            // ✅ Ensure region updates
+            region.center = CLLocationCoordinate2D(latitude: issTracker.issLatitude, longitude: issTracker.issLongitude)
 
-                if !isMuted {
-                    speechManager.speak("The ISS is \(Int(distanceMiles)) miles away from you.")
-                }
+            if !isMuted {
+                speechManager.speak("The ISS is \(Int(distanceMiles)) miles away from you.")
             }
         }
     }
 }
 
-// ✅ Fixed InfoRow to Use Correct Formatting
+// ✅ InfoRow Component
 struct InfoRow: View {
     var icon: String
     var label: String
@@ -121,10 +123,11 @@ struct InfoRow: View {
                 .foregroundColor(.gray)
         }
         .padding(10)
-        .background(RoundedRectangle(cornerRadius: 8).fill(Color.gray.opacity(0.2))) // ✅ Fixed background
+        .background(RoundedRectangle(cornerRadius: 8).fill(Color.gray.opacity(0.2)))
     }
 }
 
+// ✅ Ensure ISSTracker is identifiable
 extension ISSTracker: Identifiable {
     var id: UUID { UUID() }
 }
