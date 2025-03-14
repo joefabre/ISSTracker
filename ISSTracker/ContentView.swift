@@ -1,3 +1,4 @@
+
 import SwiftUI
 import MapKit
 import CoreLocation
@@ -62,6 +63,36 @@ struct ContentView: View {
                 .gesture(
                     DragGesture()
                         .onChanged { _ in userInteracted = true }
+                )
+                .overlay(
+                    VStack {
+                        HStack {
+                            Spacer()
+                            Button(action: zoomIn) {
+                                Image(systemName: "plus")
+                                    .foregroundColor(.white)
+                                    .frame(width: 50, height: 50)
+                                    .background(Color.blue)
+                                    .clipShape(Circle())
+                                    .scaleEffect(0.75)
+                            }
+                            .padding()
+                        }
+                        Spacer()
+                        HStack {
+                            Spacer()
+                            Button(action: zoomOut) {
+                                Image(systemName: "minus")
+                                    .foregroundColor(.white)
+                                    .frame(width: 50, height: 50)
+                                    .background(Color.blue)
+                                    .clipShape(Circle())
+                                    .scaleEffect(0.75)
+                            }
+                            .padding()
+                        }
+                        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottomTrailing)
+                    }
                 )
 
                 List {
@@ -144,9 +175,6 @@ struct ContentView: View {
                     .frame(width: 100)
                 }
                 .padding(.horizontal)
-                .padding(.horizontal)
-                .padding(.horizontal)
-                .padding(.horizontal)
 
                 Spacer()
             }
@@ -192,6 +220,20 @@ struct ContentView: View {
                 speechManager.speak("The ISS is \(Int(distanceMiles)) miles away from you.")
             }
         }
+    }
+
+    private func zoomIn() {
+        var newRegion = region
+        newRegion.span.latitudeDelta /= 2.0
+        newRegion.span.longitudeDelta /= 2.0
+        region = newRegion
+    }
+
+    private func zoomOut() {
+        var newRegion = region
+        newRegion.span.latitudeDelta = min(newRegion.span.latitudeDelta * 2.0, 180.0)
+        newRegion.span.longitudeDelta = min(newRegion.span.longitudeDelta * 2.0, 180.0)
+        region = newRegion
     }
 }
 
@@ -239,4 +281,3 @@ struct ContentView_Previews: PreviewProvider {
         ContentView()
     }
 }
-// This function calculates the distance between two geographical coordinates using the Haversine formula.
