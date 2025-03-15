@@ -98,19 +98,19 @@ struct ContentView: View {
                 )
 
                 List {
-                    Section(header: Text("Your Location").font(.headline)) {
+                    Section(header: Text("Your Location").font(.headline).foregroundColor(.black)) {
                         InfoRow(icon: "location.fill", label: "Latitude", value: String(format: "%.2f", locationManager.userLatitude))
                         InfoRow(icon: "location.fill", label: "Longitude", value: String(format: "%.2f", locationManager.userLongitude))
                     }
 
-                    Section(header: Text("ISS Information").font(.headline)) {
+                    Section(header: Text("ISS Information").font(.headline).foregroundColor(.black)) {
                         InfoRow(icon: "globe", label: "ISS Latitude", value: String(format: "%.2f", issTracker.issLatitude))
                         InfoRow(icon: "globe", label: "ISS Longitude", value: String(format: "%.2f", issTracker.issLongitude))
                         InfoRow(icon: "arrow.up", label: "Altitude", value: String(format: "%.0f miles", issTracker.issAltitudeMiles))
                         InfoRow(icon: "speedometer", label: "Speed", value: String(format: "%.0f mph", issTracker.issSpeedMph))
                     }
 
-                    Section(header: Text("Distance to ISS").font(.headline)) {
+                            Section(header: Text("Distance to ISS").font(.headline).foregroundColor(.black)) {
                         InfoRow(icon: "ruler", label: "Distance", value: String(format: "%.0f miles", distanceMiles))
                     }
                 }
