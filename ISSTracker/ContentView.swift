@@ -51,10 +51,11 @@ struct ContentView: View {
                                 Text(location.icon)
                                     .font(.callout)
                                     .scaleEffect(0.75)
+                                
                             }
                             Text(location.label)
                                 .font(.caption)
-                                .foregroundColor(.black)
+                                .foregroundColor(.white)
                                 .fontWeight(.bold)
                         }
                     }
