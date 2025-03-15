@@ -45,15 +45,17 @@ struct ContentView: View {
                             if location.icon == "location.north.fill" {
                                 Image(systemName: location.icon)
                                     .foregroundColor(.red)
-                                    .scaleEffect(0.5)
+                                    .scaleEffect(0.75)
+                                    .fontWeight(.bold)
                             } else {
                                 Text(location.icon)
                                     .font(.callout)
-                                    .scaleEffect(0.5)
+                                    .scaleEffect(0.75)
                             }
                             Text(location.label)
                                 .font(.caption)
-                                .foregroundColor(.gray)
+                                .foregroundColor(.black)
+                                .fontWeight(.bold)
                         }
                     }
                 }
