@@ -120,6 +120,7 @@ struct ContentView: View {
 
                 HStack {
                     Button(action: {
+                        SoundManager.shared.playClickSound()
                         region.center = CLLocationCoordinate2D(latitude: locationManager.userLatitude, longitude: locationManager.userLongitude)
                     }) {
                         HStack {
