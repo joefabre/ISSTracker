@@ -45,12 +45,12 @@ struct ContentView: View {
                             if location.icon == "location.north.fill" {
                                 Image(systemName: location.icon)
                                     .foregroundColor(.red)
-                                    .scaleEffect(0.75)
+                                    .scaleEffect(0.35)
                                     .fontWeight(.bold)
                             } else {
                                 Text(location.icon)
                                     .font(.callout)
-                                    .scaleEffect(0.75)
+                                    .scaleEffect(0.90)
                                 
                             }
                             Text(location.label)
@@ -192,7 +192,7 @@ struct ContentView: View {
                 ToolbarItem(placement: .bottomBar) {
                     HStack {
                         Spacer()
-                        Text("Version 1.0 - \(Date(), formatter: dateFormatter)")
+                        Text("Version 1.0.3 - \(Date(), formatter: dateFormatter)")
                             .font(.footnote)
                         Spacer()
                         Button(action: {
@@ -212,7 +212,7 @@ struct ContentView: View {
             issTracker.fetchISSLocation()
             region.center = CLLocationCoordinate2D(latitude: issTracker.issLatitude, longitude: issTracker.issLongitude)
         }
-        .onReceive(Timer.publish(every: 30, on: .main, in: .common).autoconnect()) { _ in
+        .onReceive(Timer.publish(every: 3, on: .main, in: .common).autoconnect()) { _ in
             locationManager.requestLocation()
             issTracker.fetchISSLocation()
             if !userInteracted {
