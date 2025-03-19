@@ -1,11 +1,3 @@
-//
-//  SoundManager.swift
-//  ISSTracker
-//
-//  Created by Joe Fabre on 3/16/25.
-//
-
-// SoundManager.swift
 import AVFoundation
 
 class SoundManager {
@@ -15,7 +7,11 @@ class SoundManager {
     private init() {}
 
     func playClickSound() {
-        guard let url = Bundle.main.url(forResource: "click", withExtension: "wav") else { return }
+        guard let url = Bundle.main.url(forResource: "click", withExtension: "mp3") else {
+            print("Sound file not found")
+            return
+        }
+
         do {
             audioPlayer = try AVAudioPlayer(contentsOf: url)
             audioPlayer?.play()

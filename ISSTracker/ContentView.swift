@@ -161,6 +161,7 @@ struct ContentView: View {
                     Spacer()
 
                     Button(action: {
+                        SoundManager.shared.playClickSound()
                         region.center = CLLocationCoordinate2D(latitude: issTracker.issLatitude, longitude: issTracker.issLongitude)
                     }) {
                         HStack {
@@ -212,7 +213,7 @@ struct ContentView: View {
             issTracker.fetchISSLocation()
             region.center = CLLocationCoordinate2D(latitude: issTracker.issLatitude, longitude: issTracker.issLongitude)
         }
-        .onReceive(Timer.publish(every: 3, on: .main, in: .common).autoconnect()) { _ in
+        .onReceive(Timer.publish(every: 1, on: .main, in: .common).autoconnect()) { _ in
             locationManager.requestLocation()
             issTracker.fetchISSLocation()
             if !userInteracted {
